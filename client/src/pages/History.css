@@ -1,0 +1,210 @@
+/* History page constraints */
+.history-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 80px;
+}
+
+.history-header { margin-bottom: 40px; }
+
+/* Timeline layout */
+.timeline-container {
+  position: relative;
+  padding-left: 24px;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 7px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-primary), rgba(102, 126, 234, 0.1));
+  border-radius: 2px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.history-item {
+  position: relative;
+  overflow: hidden; /* must still be hidden for max-height trick */
+  transition: all var(--transition-base);
+  animation: slideInRight 0.5s ease-out both;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -22px;
+  top: 24px;
+  width: 12px;
+  height: 12px;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-primary);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.4);
+  transition: all var(--transition-fast);
+}
+
+.history-item:hover .timeline-dot {
+  background: var(--accent-primary);
+  transform: scale(1.2);
+}
+
+.history-item-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.history-item-header:hover {
+  background: var(--glass-hover);
+}
+
+.history-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-width: 250px;
+}
+
+.history-lang-badge {
+  background: rgba(102, 126, 234, 0.15);
+  color: var(--accent-primary);
+  padding: 3px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.history-user, .history-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.history-user {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.history-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+}
+
+.history-item-header:hover .history-preview {
+  opacity: 1;
+}
+
+.history-preview code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-toggle {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  transition: transform var(--transition-fast);
+}
+
+.history-item.expanded .history-toggle {
+  transform: rotate(180deg);
+  color: var(--text-primary);
+}
+
+/* Smooth max-height expand/collapse wrapper */
+.history-detail-wrapper {
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.history-detail {
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px 24px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.history-code-block,
+.history-output-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.code-block-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.syntax-highlighted {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  overflow-x: auto;
+  max-height: 350px;
+  overflow-y: auto;
+  color: #c792ea; /* Base syntax color */
+  line-height: 1.6;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.terminal-font {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #a8ff78;
+  background: #0d1117;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 600px) {
+  .timeline-container { padding-left: 16px; }
+  .history-meta { min-width: auto; width: 100%; margin-bottom: 8px; }
+  .history-preview { width: 100%; margin-bottom: 4px; }
+  .history-item-header { flex-direction: column; align-items: flex-start; gap: 4px; position: relative; }
+  .history-toggle { position: absolute; top: 16px; right: 16px; }
+  .timeline-dot { left: -14px; }
+  .timeline-line { left: -9px; }
+}

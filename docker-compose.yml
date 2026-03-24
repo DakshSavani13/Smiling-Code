@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  # ── Node.js Backend ─────────────────────────────────────
+  server:
+    build: ./server
+    ports:
+      - '3001:3001'
+    environment:
+      - PORT=3001
+      - MONGO_URI=mongodb://mongodb:27017/smiling-code
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET:-smiling_code_secret}
+      - CLIENT_URL=http://localhost:5173
+      # Piston runs as a local Docker service — completely free
+      - PISTON_URL=http://piston:2000
+    depends_on:
+      - mongodb
+      - redis
+      - piston
+    restart: unless-stopped
+
+  # ── Piston Code Execution Engine ────────────────────────
+  # Free, open-source, 100+ languages, no API key needed
+  piston:
+    image: ghcr.io/engineer-man/piston
+    container_name: piston
+    ports:
+      - '2000:2000'
+    # Piston needs privileged to spin up isolated sandboxed processes
+    privileged: true
+    volumes:
+      - piston_data:/piston/packages
+    restart: unless-stopped
+
+  # ── MongoDB ─────────────────────────────────────────────
+  mongodb:
+    image: mongo:7
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  # ── Redis ───────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  piston_data:
